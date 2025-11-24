@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DKWIN HACK MOD</title>
+
+<style>
+  html, body { margin:0; padding:0; height:100%; width:100%; overflow:hidden; }
+  
+  /* আইফ্রেম পুরো ব্যাকগ্রাউন্ড জুড়ে থাকবে */
+  iframe { position:absolute; top:0; left:0; width:100%; height:100%; border:none; z-index:1; }
+
+  /* ফ্লোটিং বক্স স্টাইল */
+  .box {
+    width: 105px; height: 90px;
+    background: linear-gradient(135deg, #0f0f1e, #1a1a2e);
+    border: 2px solid transparent;
+    border-radius: 16px;
+    box-shadow: 0 0 15px rgba(0,255,255,0.6), inset 0 0 15px rgba(0,255,255,0.2);
+    color: #00ffff;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    padding: 8px 5px;
+    
+    /* পজিশন ফিক্সড যাতে স্ক্রল করলেও এটি ভেসে থাকে */
+    position: fixed; 
+    top: 60px; left: 50px; 
+    z-index: 9999;
+    
+    cursor: move; /* মাউস কার্সার মুভ আইকন হবে */
+    user-select: none;
+    backdrop-filter: blur(8px);
+    animation: borderGlow 4s linear infinite;
+    
+    /* মোবাইলে টাচ রেসপন্স ভালো করার জন্য */
+    touch-action: none; 
+  }
+
+  @keyframes borderGlow {
+    0%,100% { border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.6); }
+    50%     { border-color: #ff00ff; box-shadow: 0 0 25px rgba(255,0,255,0.9); }
+  }
+
+  @keyframes signalFlash {
+    0%   { transform: scale(1);   box-shadow: 0 0 15px rgba(0,255,255,0.6); }
+    20%  { transform: scale(1.15); box-shadow: 0 0 50px rgba(255,255,0,1), 0 0 80px rgba(255,0,255,1); }
+    40%  { transform: scale(1); }
+    60%  { transform: scale(1.12); }
+    100% { transform: scale(1);   box-shadow: 0 0 15px rgba(0,255,255,0.6); }
+  }
+
+  @keyframes textPop {
+    0%   { transform: scale(0.5); opacity: 0; text-shadow: 0 0 30px; }
+    70%  { transform: scale(1.3); }
+    100% { transform: scale(1);   opacity: 1; }
+  }
+
+  .title { font-size: 11px; font-weight: bold; background: linear-gradient(90deg, #00ffff, #ff00ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px; }
+  .time { font-size: 10px; color: #a0ffff; margin: 2px 0; }
+  .countdown { font-size: 14px; color: #ffff00; font-weight: bold; text-shadow: 0 0 8px #ffff00; }
+  .signal { font-size: 20px; font-weight: bold; margin-top: 5px; opacity: 1; }
+
+  .new-signal { animation: textPop 0.8s ease-out forwards; }
+  .flash-box { animation: signalFlash 1s ease-out; }
+
+  #loginPart input {
+    width: 70px; padding: 5px; background: rgba(0,0,0,0.6); border: 1px solid #00ffff;
+    border-radius: 6px; color: #00ffff; font-size: 11px; text-align: center; margin: 6px 0 4px;
+  }
+  #loginPart button {
+    padding: 4px 12px; background: linear-gradient(45deg, #00ffff, #00ffaa);
+    color: #000; border: none; border-radius: 6px; font-weight: bold; cursor: pointer;
+    box-shadow: 0 0 10px #00ffff;
+  }
+  #wrong { color: #ff0080; font-size: 9px; margin-top: 3px; display: none; }
+</style>
+</head>
+<body>
+
+<iframe src="http://sikkimgame2.us.cc/"></iframe>
+
+<!-- এই বক্সটি এখন নড়াচড়া করানো যাবে -->
+<div class="box" id="signalBox">
+  
+  <div id="loginPart">
+    <div class="title">DKWIN HACK</div>
+    <input type="password" id="passInput" placeholder="Password" autocomplete="off">
+    <br>
+    <button onclick="checkPassword()">Login</button>
+    <div id="wrong">Wrong Pass!</div>
+  </div>
+  
+  <div id="signalPart" style="display:none;">
+    <div class="title">DKWIN MOD</div>
+    <div class="time" id="currentTime">--:--:--</div>
+    <div class="countdown"><span id="countdown">30</span>s</div>
+    <div class="signal" id="predicted">WAIT</div>
+  </div>
+
+</div>
+
+<script>
+    /* === উন্নত ড্র্যাগ অ্যান্ড ড্রপ সিস্টেম (মোবাইল + পিসি) === */
+    const box = document.getElementById('signalBox');
+    let isDragging = false;
+    let startX, startY, initialLeft, initialTop;
+
+    // মাউস বা টাচ শুরু হলে
+    function dragStart(e) {
+        // ইনপুট বা বাটনে ক্লিক করলে ড্র্যাগ হবে না
+        if(e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+
+        isDragging = true;
+        
+        // টাচ বা মাউসের পজিশন নেওয়া
+        let clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        let clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+        startX = clientX;
+        startY = clientY;
+
+        initialLeft = box.offsetLeft;
+        initialTop = box.offsetTop;
+    }
+
+    // মাউস বা টাচ মুভ করলে
+    function dragMove(e) {
+        if (!isDragging) return;
+
+        e.preventDefault(); // মোবাইলে স্ক্রল বন্ধ রাখার জন্য
+
+        let clientX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+        let clientY = e.type.includes('touch') ? e.touches[0].clientY : e.clientY;
+
+        let dx = clientX - startX;
+        let dy = clientY - startY;
+
+        // নতুন পজিশন সেট করা
+        box.style.left = (initialLeft + dx) + "px";
+        box.style.top = (initialTop + dy) + "px";
+    }
+
+    // মাউস বা টাচ ছেড়ে দিলে
+    function dragEnd() {
+        isDragging = false;
+    }
+
+    // ইভেন্ট লিসেনার যোগ করা (মোবাইল এবং পিসি উভয়ের জন্য)
+    box.addEventListener('mousedown', dragStart);
+    box.addEventListener('touchstart', dragStart, {passive: false});
+
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('touchmove', dragMove, {passive: false});
+
+    document.addEventListener('mouseup', dragEnd);
+    document.addEventListener('touchend', dragEnd);
+
+    /* === পাসওয়ার্ড এবং টাইমার লজিক === */
+    function checkPassword() {
+        var pass = document.getElementById('passInput').value;
+        if (pass === 'dkwin999') {
+            document.getElementById('loginPart').style.display = 'none';
+            document.getElementById('signalPart').style.display = 'block';
+            startSystem(); 
+        } else {
+            document.getElementById('wrong').style.display = 'block';
+        }
+    }
+
+    function startSystem() {
+        setInterval(() => {
+            let d = new Date();
+            document.getElementById('currentTime').innerText = d.toLocaleTimeString('en-US', {hour12: false});
+        }, 1000);
+
+        let count = 30;
+        const results = ["BIG", "SMALL"];
+        
+        setInterval(() => {
+            count--;
+            document.getElementById('countdown').innerText = count;
+            
+            if(count <= 0) {
+                count = 30;
+                let randomSignal = results[Math.floor(Math.random() * results.length)];
+                let predBox = document.getElementById('predicted');
+                
+                predBox.innerText = randomSignal;
+                predBox.classList.remove('new-signal');
+                void predBox.offsetWidth; 
+                predBox.classList.add('new-signal');
+                
+                box.classList.remove('flash-box');
+                void box.offsetWidth;
+                box.classList.add('flash-box');
+            }
+        }, 1000);
+    }
+</script>
+
+</body>
+</html>
